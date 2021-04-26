@@ -20,7 +20,7 @@ class AddTask extends React.Component {
         })
     }
 
-    handleSubmit = (event) =>{
+    handleSubmit = (event) => {
         event.preventDefault();
         this.props.onSubmit({
             name: this.state.name,
@@ -38,18 +38,17 @@ class AddTask extends React.Component {
             <div>
                 <form onSubmit={this.handleSubmit} className='form'>
                     <InputName
-                        value = {this.props.name}
+                        value = {this.state.name}
                         onChange = {this.handleChangeName}
                     />
                     <InputDescription
-                        value = {this.props.description}
+                        value = {this.state.description}
                         onChange = {this.handleChangeDescription}
                     />
                     <Button 
                         onClick = {this.handleSubmit}
                         value = 'Add new task'
                     />
-                    {/* <button className="add-button" onClick={this.handleSubmit}>Add new task</button> */}
                 </form>
             </div> 
         )
