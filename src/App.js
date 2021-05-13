@@ -1,8 +1,6 @@
 import './App.css';
 import MyTodoList from './components/TaskList/TaskList'
 
-
-
 const App = () => {
   return (
     <div>

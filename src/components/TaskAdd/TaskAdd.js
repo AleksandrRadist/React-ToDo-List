@@ -2,7 +2,10 @@ import React from "react"
 import InputName from '../input/inputName'
 import InputDescription from '../input/inputDescription'
 import Button from '../button/button.js'
-import './TaskAdd.css';
+import styles from './TaskAdd.scss'
+import classnames from 'classnames/bind'
+
+const cx = classnames.bind(styles)
 class AddTask extends React.Component {
     state = {
         name: '',
@@ -36,18 +39,21 @@ class AddTask extends React.Component {
     render() {
         return (
             <div>
-                <form onSubmit={this.handleSubmit} className='form'>
+                <form onSubmit={this.handleSubmit} className={cx("form", {[`form-theme-${this.props.theme}`]: true})}>
                     <InputName
                         value = {this.state.name}
                         onChange = {this.handleChangeName}
+                        theme={this.props.theme}
                     />
                     <InputDescription
                         value = {this.state.description}
                         onChange = {this.handleChangeDescription}
+                        theme={this.props.theme}
                     />
                     <Button 
                         onClick = {this.handleSubmit}
                         value = 'Add new task'
+                        theme={this.props.theme}
                     />
                 </form>
             </div> 

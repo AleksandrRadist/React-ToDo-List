@@ -1,0 +1,22 @@
+.task {
+    margin: 10px;
+    width: 99%;
+    &-theme-light {
+        background: var(--backgroundColour);
+    }
+    &-theme-dark {
+        background: var(--backgroundColourDark);
+    }
+  }
+  
+.line {
+    padding-top: 10px;
+    padding-left: 5%;
+    padding-right: 5%;
+    &-theme-light {
+        color: var(--colour);
+    }
+    &-theme-dark {
+        color: var(--colourDark);
+    }
+}
