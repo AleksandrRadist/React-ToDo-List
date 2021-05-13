@@ -1,6 +1,6 @@
 import React from "react"
 import Button from '../button/button.js'
-import styles from './Task.scss'
+import styles from './Task.module.scss'
 import classnames from 'classnames/bind'
 
 const cx = classnames.bind(styles)

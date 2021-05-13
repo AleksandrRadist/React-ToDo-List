@@ -2,7 +2,7 @@ import React from "react"
 import InputName from '../input/inputName'
 import InputDescription from '../input/inputDescription'
 import Button from '../button/button.js'
-import styles from './TaskAdd.scss'
+import styles from './TaskAdd.module.scss'
 import classnames from 'classnames/bind'
 
 const cx = classnames.bind(styles)
@@ -40,11 +40,13 @@ class AddTask extends React.Component {
         return (
             <div>
                 <form onSubmit={this.handleSubmit} className={cx("form", {[`form-theme-${this.props.theme}`]: true})}>
+                    <div className={cx("line", {[`line-theme-${this.props.theme}`]: true})}>Name</div>
                     <InputName
                         value = {this.state.name}
                         onChange = {this.handleChangeName}
                         theme={this.props.theme}
                     />
+                    <div className={cx("line", {[`line-theme-${this.props.theme}`]: true})}>Description</div>
                     <InputDescription
                         value = {this.state.description}
                         onChange = {this.handleChangeDescription}

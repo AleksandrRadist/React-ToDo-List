@@ -8,3 +8,13 @@
         background: var(--backgroundColourDark);
     }
 }
+.line {
+    margin-left: 15%;
+    margin-top: 20px;
+    &-theme-light {
+        color: var(--colour);
+    }
+    &-theme-dark {
+        color: var(--colourDark);
+    }
+}

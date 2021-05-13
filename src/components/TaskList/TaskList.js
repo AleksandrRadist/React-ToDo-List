@@ -1,7 +1,7 @@
 import React from "react"
 import Task from '../Task/Task.js'
 import AddTask from '../TaskAdd/TaskAdd.js'
-import styles from './MyList.scss'
+import styles from './TaskList.module.scss'
 import classnames from 'classnames/bind'
 
 const cx = classnames.bind(styles);
