@@ -1,16 +1,14 @@
 import React from "react"
 import InputName from '../input/inputName'
-import InputDescription from '../input/inputDescription'
 import Button from '../button/button.js'
-import styles from './TaskAdd.module.scss'
+import styles from './ProjectAdd.module.scss'
 import classnames from 'classnames/bind'
 import { ThemeContext } from "../Context/ThemeContext"
 
 const cx = classnames.bind(styles)
-class AddTask extends React.Component {
+class AddProject extends React.Component {
     state = {
         name: '',
-        description: ''
     }
 
     handleChangeName = event => {
@@ -18,24 +16,15 @@ class AddTask extends React.Component {
             name: event.target.value
         })
     }
-    handleChangeDescription = event => {
-        this.setState({
-            description: event.target.value
-        })
-    }
 
     handleSubmit = (event) => {
         event.preventDefault();
         this.props.onSubmit({
             name: this.state.name,
-            description: this.state.description,
-            completed: false,
-            id: this.props.tasksLen + 1,
-            projectId: this.props.projectId
+            id: this.props.projectsLen + 1
         })
         this.setState({
             name: '',
-            description: ''
         })
     }
     render() {
@@ -43,21 +32,15 @@ class AddTask extends React.Component {
             <ThemeContext.Consumer>{
                 theme => (
             <div>
-                <form onSubmit={this.handleSubmit} className={cx("form", {[`form-theme-${theme}`]: true})}>
-                    <div className={cx("line", {[`line-theme-${theme}`]: true})}>Name</div>
+                <form onSubmit={this.handleSubmit} className={cx("form", {[`form-theme-${this.theme}`]: true})}>
+                    <div className={cx("line", {[`line-theme-${this.props.theme}`]: true})}>Name</div>
                     <InputName
                         value = {this.state.name}
                         onChange = {this.handleChangeName}
-                        theme={theme}
-                    />
-                    <div className={cx("line", {[`line-theme-${theme}`]: true})}>Description</div>
-                    <InputDescription
-                        value = {this.state.description}
-                        onChange = {this.handleChangeDescription}
                     />
                     <Button 
                         onClick = {this.handleSubmit}
-                        value = 'Add new task'
+                        value = 'Add new project'
                     />
                 </form>
             </div> 
@@ -66,4 +49,4 @@ class AddTask extends React.Component {
         )
     }
 }
-export default AddTask
+export default AddProject

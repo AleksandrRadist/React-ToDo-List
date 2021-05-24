@@ -1,6 +1,8 @@
-.task {
+.project {
     margin: 10px;
-    width: 90%;
+    margin-top: 50px;
+    width: 50%;
+    min-height: 70px;
     &-theme-light {
         background: var(--backgroundColour);
         border: 5px solid var(--colour);

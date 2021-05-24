@@ -2,7 +2,7 @@ import React from "react"
 import Button from '../button/button.js'
 import styles from './Task.module.scss'
 import classnames from 'classnames/bind'
-
+import { ThemeContext } from "../Context/ThemeContext"
 const cx = classnames.bind(styles)
 class Task extends React.Component {
   state = {
@@ -11,16 +11,21 @@ class Task extends React.Component {
 
   render() {
     return (
-      <div className={cx("task", {[`task-theme-${this.props.theme}`]: true})}>
-        <div className={cx("line", {[`line-theme-${this.props.theme}`]: true})}>Name: { this.props.name }</div>
-        <div className={cx("line", {[`line-theme-${this.props.theme}`]: true})}>Description: { this.props.description }</div>
-        <div className={cx("line", {[`line-theme-${this.props.theme}`]: true})}>Status: { this.props.completed.toString() }</div>
-        <Button 
-          onClick = {() => this.props.onClick(this.props.id)}
-          value = 'Change status'
-          theme={this.props.theme}
-        />
-    </div>
+      <ThemeContext.Consumer>{
+        theme => (
+          <div className={cx("task", {[`task-theme-${theme}`]: true})}>
+          <div className={cx("line", {[`line-theme-${theme}`]: true})}>Name: { this.props.name }</div>
+          <div className={cx("line", {[`line-theme-${theme}`]: true})}>Description: { this.props.description }</div>
+          <div className={cx("line", {[`line-theme-${theme}`]: true})}>Status: { this.props.completed.toString() }</div>
+          <Button 
+            onClick = {() => this.props.onClick(this.props.id)}
+            value = 'Change status'
+          />
+          </div>
+        )
+      }
+
+    </ThemeContext.Consumer>
     )
   }
 }
