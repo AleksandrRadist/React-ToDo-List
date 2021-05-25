@@ -1,0 +1,16 @@
+.button {
+    margin-top: 20px;
+    margin-left: 20%;
+    height: 30px;
+    width: 60%;
+    margin-bottom: 20px;
+    display: inline-block;
+    &-theme-light {
+        background: var(--colour);
+        color: var(--insideColour);
+    }
+    &-theme-dark {
+        background: var(--colourDark);
+        color: var(--insideColourDark);
+    }
+}

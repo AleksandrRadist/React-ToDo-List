@@ -1,16 +1,19 @@
 import React from 'react'
-import './input.css'
+import styles from './input.module.scss'
+import classnames from 'classnames/bind'
+
+const cx = classnames.bind(styles)
 
 const InputDesciption = ({
   onChange, 
-  value
+  value,
+  theme
 }) => {
   return (
     <input name="description"
         value={value}
         onChange={onChange}
-        placeholder="Description"
-        className="input"
+        className={cx("input", {[`input-theme-${theme}`]: true})}
     />
   )
 }

@@ -1,13 +1,16 @@
 import React from 'react'
-import './button.css'
+import styles from './button.module.scss'
+import classnames from 'classnames/bind'
+
+const cx = classnames.bind(styles)
 
 const Button = ({
   onClick,
-  id,
-  value
+  value,
+  theme
 }) => {
     return (
-        <button className='button' onClick={onClick}>{value}</button>
+        <button className={cx("button", {[`button-theme-${theme}`]: true})} onClick={onClick}>{value}</button>
     )
 }
 
