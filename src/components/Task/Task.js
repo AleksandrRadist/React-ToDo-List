@@ -14,32 +14,30 @@ const mapDispatchToProps = (dispatch) => ({
   dispatchOnStatusChange: (taskId) => dispatch(handleChangeStatus(taskId))
 });
 
-class TaskComponent extends React.Component {
-  state = {
-    complete: this.props.completed
-  }
-  handleStatusChange = () => {
-    this.props.dispatchOnStatusChange(this.props.id)
-    console.log(this.props.completed)
-}
-  render() {
-    return (
-      <ThemeContext.Consumer>{
-        theme => (
-          <div className={cx("task", {[`task-theme-${theme}`]: true})}>
-          <div className={cx("line", {[`line-theme-${theme}`]: true})}>Name: { this.props.name }</div>
-          <div className={cx("line", {[`line-theme-${theme}`]: true})}>Description: { this.props.description }</div>
-          <div className={cx("line", {[`line-theme-${theme}`]: true})}>Status: { this.props.completed.toString() }</div>
-          <Button 
-            onClick = {this.handleStatusChange}
-            value = 'Change status'
-          />
-          </div>
-        )
-      }
+const TaskComponent = (props) => {
 
-    </ThemeContext.Consumer>
-    )
-  }
+  const handleStatusChange = () => {
+    props.dispatchOnStatusChange(props.id)
+    console.log(props.completed)
 }
+
+  return (
+    <ThemeContext.Consumer>{
+      theme => (
+        <div className={cx("task", {[`task-theme-${theme}`]: true})}>
+        <div className={cx("line", {[`line-theme-${theme}`]: true})}>Name: { props.name }</div>
+        <div className={cx("line", {[`line-theme-${theme}`]: true})}>Description: { props.description }</div>
+        <div className={cx("line", {[`line-theme-${theme}`]: true})}>Status: { props.completed.toString() }</div>
+        <Button 
+          onClick = {handleStatusChange}
+          value = 'Change status'
+        />
+        </div>
+      )
+    }
+
+  </ThemeContext.Consumer>
+  )
+}
+
 export const Task = connect(mapStateToProps, mapDispatchToProps)(TaskComponent)

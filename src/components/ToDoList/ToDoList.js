@@ -14,35 +14,31 @@ const mapDispatchToProps = (dispatch) => ({
 const mapStateToProps = (state) => ({
     theme: state.theme.theme,
     projects: state.projects.projectsById,
-    state: state
 });
 
-class ToDoListComponent extends React.Component {
-    state = {
-        state: this.props.state
+const ToDoListComponent = (props) => {
+
+    const handleThemeChange = event => {
+        props.dispatchOnThemeChange(event.target.value)
     }
 
-    handleThemeChange = event => {
-        this.props.dispatchOnThemeChange(event.target.value)
-    }
-
-    ProjectPage = () => {
+    const ProjectPage = () => {
         return (
             <div className='main'>
-            <ThemeContext.Provider value={this.props.theme}>
-            <ProjectList themeChange={this.handleThemeChange}/>
+            <ThemeContext.Provider value={props.theme}>
+            <ProjectList themeChange={handleThemeChange}/>
             </ThemeContext.Provider>
             </div>
         )
     }
 
-    TaskPage = ({ match }) => {
+    const TaskPage = ({ match }) => {
         const { projectId } = match.params
-        if (projectId in this.props.projects) {
+        if (projectId in props.projects) {
             return(
                 <div className='main'>
-                <ThemeContext.Provider value={this.props.theme}>
-                <TaskList projectId={projectId} themeChange={this.handleThemeChange}/>
+                <ThemeContext.Provider value={props.theme}>
+                <TaskList projectId={projectId} themeChange={handleThemeChange}/>
                 </ThemeContext.Provider>
                 </div>
             )
@@ -55,21 +51,21 @@ class ToDoListComponent extends React.Component {
 
     }
 
-    render() {
-        return (
-            <BrowserRouter>
-            <div className='main'>
-              <Switch>
-                <Route exact path="/" component={this.ProjectPage}/>
-                <Route exact path="/projects/" component={this.ProjectPage}/>
-                <Route path="/projects/:projectId/" component={this.TaskPage}/>
-                <Redirect to="/" />
-              </Switch>
-            </div>
-          </BrowserRouter>
-          )
-    }
-  }
+
+    return (
+        <BrowserRouter>
+        <div className='main'>
+            <Switch>
+            <Route exact path="/" component={ProjectPage}/>
+            <Route exact path="/projects/" component={ProjectPage}/>
+            <Route path="/projects/:projectId/" component={TaskPage}/>
+            <Redirect to="/" />
+            </Switch>
+        </div>
+        </BrowserRouter>
+        )
+}
+  
 
 
 export const ToDoList = connect(mapStateToProps, mapDispatchToProps)(ToDoListComponent);
