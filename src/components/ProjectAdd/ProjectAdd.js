@@ -4,9 +4,19 @@ import Button from '../button/button.js'
 import styles from './ProjectAdd.module.scss'
 import classnames from 'classnames/bind'
 import { ThemeContext } from "../Context/ThemeContext"
-
+import { connect } from "react-redux"
+import { handleAddProject } from '../../actions/actions';
 const cx = classnames.bind(styles)
-class AddProject extends React.Component {
+
+const mapStateToProps = (state) => ({
+  projectsLen : Object.keys(state.projects.projectsById).length,
+  state: state.projects
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  dispatchOnAddProject: (newProject) => dispatch(handleAddProject(newProject))
+});
+class ProjectAddComponent extends React.Component {
     state = {
         name: '',
     }
@@ -19,9 +29,10 @@ class AddProject extends React.Component {
 
     handleSubmit = (event) => {
         event.preventDefault();
-        this.props.onSubmit({
+        this.props.dispatchOnAddProject({
             name: this.state.name,
-            id: this.props.projectsLen + 1
+            id: this.props.projectsLen + 1,
+            tasksIds: []
         })
         this.setState({
             name: '',
@@ -49,4 +60,4 @@ class AddProject extends React.Component {
         )
     }
 }
-export default AddProject
+export const ProjectAdd = connect(mapStateToProps, mapDispatchToProps)(ProjectAddComponent)

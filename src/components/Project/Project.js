@@ -2,9 +2,13 @@ import React from "react"
 import styles from './Project.module.scss'
 import classnames from 'classnames/bind'
 import { Link } from 'react-router-dom';
+import { connect } from "react-redux"
 import { ThemeContext } from "../Context/ThemeContext"
 const cx = classnames.bind(styles)
-class Project extends React.Component {
+const mapStateToProps = (state) => ({
+  tasks : state.tasks.tasksById
+});
+class ProjectComponent extends React.Component {
   state = {
     complete: this.props.completed
   }
@@ -22,4 +26,4 @@ class Project extends React.Component {
     )
   }
 }
-export default Project
+export const Project =  connect(mapStateToProps)(ProjectComponent)
