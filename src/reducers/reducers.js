@@ -1,8 +1,8 @@
 import {combineReducers} from "redux";
-import {ADD_TASK, CHANGE_STATUS, THEME_CHANGE, ADD_PROJECT, UPDATE_PROJECT} from "../actions/actions"
+import { THEME_CHANGE } from "../actions/actions"
+import { LOAD_PROJECTS, LOAD_TASKS } from "../actions/actionsServer"
 import data from '../components/Data/Data'
 import { DEFAULT_THEME } from "../components/Context/ThemeContext"
-
 const normalizeState = (projectArray) => {
     var normalizedState = {
         projectsById: {
@@ -32,34 +32,6 @@ const normalizeState = (projectArray) => {
     return normalizedState 
 }
 
-export const taskReducer = (state = normalizeState(data), action) => {
-    switch (action.type) {
-        case ADD_TASK: {
-            const updatedTasks = {...state.tasksById}
-            updatedTasks[action.payload.id] = {
-                id: action.payload.id, 
-                name: action.payload.name, 
-                description: action.payload.description, 
-                completed: action.payload.completed
-            }
-            return {
-                ...state,
-                tasksById: updatedTasks
-            }
-        }
-        case CHANGE_STATUS: {
-            const updatedTasks = {...state.tasksById}
-            updatedTasks[action.payload].completed = !state.tasksById[action.payload].completed 
-            return {
-                ...state,
-                tasksById: updatedTasks
-            }
-        }
-        default:
-            return state
-    }
-}
-
 export const themeReducer = (state = normalizeState(data), action) => {
     switch (action.type) {
         case THEME_CHANGE: {
@@ -75,32 +47,34 @@ export const themeReducer = (state = normalizeState(data), action) => {
 
 export const projectReducer = (state = normalizeState(data), action) => {
     switch (action.type) {
-        case UPDATE_PROJECT: {
-            const updatedProjects = {...state.projectsById}
-            updatedProjects[action.payload.projectId].tasksIds = [...state.projectsById[action.payload.projectId].tasksIds, action.payload.id]
+        case LOAD_PROJECTS: {
             return {
-                ...state,
-                projectsById: updatedProjects
-            }
-        }
-        case ADD_PROJECT: {
+              ...state,
+              projectsById: action.payload
+            };
+          }
+        case LOAD_TASKS: {
             const updatedProjects = {...state.projectsById}
-            updatedProjects[action.payload.id] = {
-                id: action.payload.id,
-                name: action.payload.name,
-                tasksIds: []
-            }
+            const id = action.payload.projectId
+            const payload = {...action.payload}
+            delete payload['projectId']
+            updatedProjects[id].tasksIds = Object.keys(payload)
+            const updatedTasks = Object.assign({}, state.tasksById, payload)
             return {
-                ...state, projectsById: updatedProjects
-            }
-        }
-        default:
+              ...state,
+              tasksById: updatedTasks,
+              projectsById: updatedProjects
+            };
+          }
+        default: {
             return state
+        }
+            
+            
     }
 }
 
 export const rootReducer = combineReducers({
-    tasks: taskReducer,
     theme: themeReducer,
     projects: projectReducer
 })

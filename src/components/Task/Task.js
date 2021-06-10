@@ -4,21 +4,31 @@ import styles from './Task.module.scss'
 import classnames from 'classnames/bind'
 import { ThemeContext } from "../Context/ThemeContext"
 import { connect } from "react-redux"
-import { handleChangeStatus } from '../../actions/actions';
+import { changeTaskStatus } from "../../api/api"
+import { actionLoadTasks } from "../../actions/actionsServer"
+
 const cx = classnames.bind(styles)
+
 const mapStateToProps = (state) => ({
-  tasksLen : Object.keys(state.tasks.tasksById).length
+  tasksLen : Object.keys(state.projects.tasksById).length
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  dispatchOnStatusChange: (taskId) => dispatch(handleChangeStatus(taskId))
+  fetchTasks: (projectId) => dispatch(actionLoadTasks(projectId))
 });
 
 const TaskComponent = (props) => {
 
   const handleStatusChange = () => {
-    props.dispatchOnStatusChange(props.id)
-    console.log(props.completed)
+    changeTaskStatus({
+      projectId: props.projectId,
+      id: props.id,
+      name: props.name,
+      description: props.description,
+      completed: props.completed
+    }).then((response) => {
+        props.fetchTasks(props.projectId);
+    });
 }
 
   return (
