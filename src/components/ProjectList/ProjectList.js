@@ -1,20 +1,22 @@
 import React from "react"
-import Project from '../Project/Project.js'
-import AddProject from '../ProjectAdd/ProjectAdd.js'
+import { Project } from '../Project/Project.js'
+import { ProjectAdd } from '../ProjectAdd/ProjectAdd.js'
 import styles from './ProjectList.module.scss'
 import classnames from 'classnames/bind'
 import {ThemeContext } from "../Context/ThemeContext"
-
-
+import { connect } from "react-redux"
+const mapStateToProps = (state) => ({
+    projects: state.projects.projectsById
+  });
+  
 const cx = classnames.bind(styles);
-class ProjectList extends React.Component {
-    state = this.props.state
+const ProjectListComponent = (props) => {
 
-    getProjects = () => {
-        const projects = Object.values(this.state.projectsById)
+    const getProjects = () => {
+        const projects = Object.values(props.projects)
         return projects
       }
-    render() {
+
         return (
             <ThemeContext.Consumer>{
                 theme => (
@@ -24,31 +26,32 @@ class ProjectList extends React.Component {
                   <div className={cx("theme-switcher")}>
                     <div className={cx('point')}>
                         <input type="radio" name="theme" id="light" value="light"
-                                checked={theme === "light"} onChange={this.props.themeChange}
+                                checked={theme === "light"} onChange={props.themeChange}
                                 className={cx("radio", {[`radio-theme-${theme}`]: true})}/>
                         <label className={cx("label", {[`label-theme-${theme}`]: true})}>Light Theme</label>
                     </div>
     
                     <div className={cx('point')}>
                         <input type="radio" name="theme" id="dark" value="dark"
-                                checked={theme === "dark"} onChange={this.props.themeChange}
+                                checked={theme === "dark"} onChange={props.themeChange}
                                 className={cx("radio", {[`radio-theme-${theme}`]: true})}/>
                         <label className={cx("label", {[`label-theme-${theme}`]: true})}>Dark Theme</label>
                     </div>
                 </div>
-                    <AddProject onSubmit={this.props.addProject} projectsLen={Object.keys(this.state.projectsById).length}/>
+                    <ProjectAdd/>
                 </div>
-                <div className={cx("content", {[`content-theme-${theme}`]: true})}>
-                  {this.getProjects().map(it => (
+                {props.projects && <div className={cx("content", {[`content-theme-${theme}`]: true})}>
+                  {getProjects().map(it => (
                       <Project key={it.id} id={it.id} 
-                      name={it.name} onClick={this.props.changeStatus}/>
+                      name={it.name} onClick={props.changeStatus}/>
                   ))}
-                </div>
+                </div>}
             </main>
                 )}
                 </ThemeContext.Consumer>
+
           )
     }
-  }
+ 
 
-  export default ProjectList
+  export const ProjectList = connect(mapStateToProps)(ProjectListComponent)

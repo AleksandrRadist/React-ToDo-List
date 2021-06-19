@@ -5,9 +5,20 @@ import Button from '../button/button.js'
 import styles from './TaskAdd.module.scss'
 import classnames from 'classnames/bind'
 import { ThemeContext } from "../Context/ThemeContext"
-
+import { connect } from "react-redux"
+import { handleAddTask, handleUpdateProject } from '../../actions/actions';
 const cx = classnames.bind(styles)
-class AddTask extends React.Component {
+
+const mapStateToProps = (state) => ({
+    tasksLen : Object.keys(state.tasks.tasksById).length
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    dispatchOnAddTask: (newTask) => dispatch(handleAddTask(newTask)),
+    dispatchOnUpdateProject: (newId) => dispatch(handleUpdateProject(newId))
+});
+
+class TaskAddComponent extends React.Component {
     state = {
         name: '',
         description: ''
@@ -18,6 +29,7 @@ class AddTask extends React.Component {
             name: event.target.value
         })
     }
+
     handleChangeDescription = event => {
         this.setState({
             description: event.target.value
@@ -25,11 +37,14 @@ class AddTask extends React.Component {
     }
 
     handleSubmit = (event) => {
-        event.preventDefault();
-        this.props.onSubmit({
+        event.preventDefault()
+        this.props.dispatchOnAddTask({
             name: this.state.name,
             description: this.state.description,
             completed: false,
+            id: this.props.tasksLen + 1,
+        })
+        this.props.dispatchOnUpdateProject({
             id: this.props.tasksLen + 1,
             projectId: this.props.projectId
         })
@@ -38,6 +53,7 @@ class AddTask extends React.Component {
             description: ''
         })
     }
+
     render() {
         return (
             <ThemeContext.Consumer>{
@@ -66,4 +82,4 @@ class AddTask extends React.Component {
         )
     }
 }
-export default AddTask
+export const TaskAdd = connect(mapStateToProps, mapDispatchToProps)(TaskAddComponent)

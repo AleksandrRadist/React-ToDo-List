@@ -1,95 +1,44 @@
 import React from "react"
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom"
-import data from '../Data/Data'
-import ProjectList from '../ProjectList/ProjectList'
-import TaskList from '../TaskList/TaskList'
-import { DEFAULT_THEME, ThemeContext } from "../Context/ThemeContext"
+import { ProjectList } from '../ProjectList/ProjectList'
+import { TaskList } from '../TaskList/TaskList'
+import { ThemeContext } from "../Context/ThemeContext"
 import './ToDoList.css'
+import { connect } from "react-redux";
+import { handleThemeChange } from '../../actions/actions';
 
-const normalizeState = (projectArray) => {
-    var normalizedState = {
-        projectsById: {
-        },
-        tasksById: {
-        },
-        theme: DEFAULT_THEME
-    }
-    for (var i of projectArray) {
-        var project = {
-            id: i.id,
-            name: i.name,
-            tasksIds: []
-        }
-        for (var j of i.tasksIds) {
-            var task = {
-                id: j.id,
-                name: j.name,
-                description: j.description,
-                completed: j.completed
-            }
-            project.tasksIds.push(task.id)
-            normalizedState.tasksById[task.id] = task
-        }
-        normalizedState.projectsById[project.id] = project
-    }
-    return normalizedState 
-  }
+const mapDispatchToProps = (dispatch) => ({
+    dispatchOnThemeChange: (theme) => dispatch(handleThemeChange(theme)),
+});
 
-class ToDoList extends React.Component {
-    state = normalizeState(data)
+const mapStateToProps = (state) => ({
+    theme: state.theme.theme,
+    projects: state.projects.projectsById,
+});
 
-    handleThemeChange = event => {
-      this.setState({theme: event.target.value});
-    }
-    changeStatus = (taskId) => {
-        const updatedTasks = this.state.tasksById
-        updatedTasks[taskId].completed = !this.state.tasksById[taskId].completed 
+const ToDoListComponent = (props) => {
 
-        this.setState(curState => ({
-            theme: curState.theme,
-            projectsById: curState.projectsById,
-            tasksById: updatedTasks
-        }))
-      }
-    addTask = props => {
-        const task = {id: props.id, name: props.name, description: props.description, completed: props.completed}
-        const updatedProjects = this.state.projectsById
-        updatedProjects[props.projectId].tasksIds.push(task.id)
-        const updatedTasks = this.state.tasksById
-        updatedTasks[task.id] = task
-        this.setState(curState => ({
-            theme: curState.theme,
-            projectsById: updatedProjects,
-            tasksById: updatedTasks
-        }))
+    const handleThemeChange = event => {
+        props.dispatchOnThemeChange(event.target.value)
     }
 
-    addProject = project => {
-        const updatedProjects = this.state.projectsById
-        updatedProjects[project.id] = {id: project.id, name: project.name, tasksIds: []}
-        this.setState(curState => ({
-        theme: curState.theme,
-        projectsById: updatedProjects,
-        tasksById: curState.tasksById
-            }))
-    }
-    ProjectPage = () => {
+    const ProjectPage = () => {
         return (
             <div className='main'>
-            <ThemeContext.Provider value={this.state.theme}>
-            <ProjectList state={this.state} themeChange={this.handleThemeChange} addProject={this.addProject}/>
+            <ThemeContext.Provider value={props.theme}>
+            <ProjectList themeChange={handleThemeChange}/>
             </ThemeContext.Provider>
             </div>
         )
     }
 
-    TaskPage = ({ match }) => {
+    const TaskPage = ({ match }) => {
         const { projectId } = match.params
-        if (projectId in this.state.projectsById) {
+        if (projectId in props.projects) {
             return(
                 <div className='main'>
-                <ThemeContext.Provider value={this.state.theme}>
-                <TaskList themeChange={this.handleThemeChange} changeStatus={this.changeStatus} addTask={this.addTask} state={this.state} projectId={projectId}/>
+                <ThemeContext.Provider value={props.theme}>
+                <TaskList projectId={projectId} themeChange={handleThemeChange}/>
                 </ThemeContext.Provider>
                 </div>
             )
@@ -102,21 +51,21 @@ class ToDoList extends React.Component {
 
     }
 
-    render() {
-        return (
-            <BrowserRouter>
-            <div className='main'>
-              <Switch>
-                <Route exact path="/" component={this.ProjectPage}/>
-                <Route exact path="/projects/" component={this.ProjectPage}/>
-                <Route path="/projects/:projectId/" component={this.TaskPage}/>
-                <Redirect to="/" />
-              </Switch>
-            </div>
-          </BrowserRouter>
-          )
-    }
-  }
+
+    return (
+        <BrowserRouter>
+        <div className='main'>
+            <Switch>
+            <Route exact path="/" component={ProjectPage}/>
+            <Route exact path="/projects/" component={ProjectPage}/>
+            <Route path="/projects/:projectId/" component={TaskPage}/>
+            <Redirect to="/" />
+            </Switch>
+        </div>
+        </BrowserRouter>
+        )
+}
+  
 
 
-export default ToDoList
+export const ToDoList = connect(mapStateToProps, mapDispatchToProps)(ToDoListComponent);
