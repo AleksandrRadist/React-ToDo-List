@@ -6,16 +6,16 @@ import styles from './TaskAdd.module.scss'
 import classnames from 'classnames/bind'
 import { ThemeContext } from "../Context/ThemeContext"
 import { connect } from "react-redux"
-import { handleAddTask, handleUpdateProject } from '../../actions/actions';
+import { actionLoadTasks } from '../../actions/actionsServer';
+import { uploadTask } from "../../api/api"
+
 const cx = classnames.bind(styles)
 
 const mapStateToProps = (state) => ({
-    tasksLen : Object.keys(state.tasks.tasksById).length
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    dispatchOnAddTask: (newTask) => dispatch(handleAddTask(newTask)),
-    dispatchOnUpdateProject: (newId) => dispatch(handleUpdateProject(newId))
+    fetchTasks: (projectId) => dispatch(actionLoadTasks(projectId)),
 });
 
 class TaskAddComponent extends React.Component {
@@ -38,16 +38,13 @@ class TaskAddComponent extends React.Component {
 
     handleSubmit = (event) => {
         event.preventDefault()
-        this.props.dispatchOnAddTask({
+        uploadTask({
             name: this.state.name,
             description: this.state.description,
-            completed: false,
-            id: this.props.tasksLen + 1,
-        })
-        this.props.dispatchOnUpdateProject({
-            id: this.props.tasksLen + 1,
             projectId: this.props.projectId
-        })
+        }).then((response) => {
+            this.props.fetchTasks(this.props.projectId);
+        });
         this.setState({
             name: '',
             description: ''

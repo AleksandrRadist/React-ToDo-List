@@ -5,16 +5,14 @@ import styles from './ProjectAdd.module.scss'
 import classnames from 'classnames/bind'
 import { ThemeContext } from "../Context/ThemeContext"
 import { connect } from "react-redux"
-import { handleAddProject } from '../../actions/actions';
+import { actionLoadProjects } from "../../actions/actionsServer"
+import { uploadProject } from "../../api/api"
 const cx = classnames.bind(styles)
 
-const mapStateToProps = (state) => ({
-  projectsLen : Object.keys(state.projects.projectsById).length,
-  state: state.projects
-});
+const mapStateToProps = (state) => ({});
 
 const mapDispatchToProps = (dispatch) => ({
-  dispatchOnAddProject: (newProject) => dispatch(handleAddProject(newProject))
+  fetchProjects: () => dispatch(actionLoadProjects())
 });
 class ProjectAddComponent extends React.Component {
     state = {
@@ -29,11 +27,9 @@ class ProjectAddComponent extends React.Component {
 
     handleSubmit = (event) => {
         event.preventDefault();
-        this.props.dispatchOnAddProject({
-            name: this.state.name,
-            id: this.props.projectsLen + 1,
-            tasksIds: []
-        })
+        uploadProject({name: this.state.name}).then((response) => {
+            this.props.fetchProjects();
+        });
         this.setState({
             name: '',
         })

@@ -6,7 +6,7 @@ import { connect } from "react-redux"
 import { ThemeContext } from "../Context/ThemeContext"
 const cx = classnames.bind(styles)
 const mapStateToProps = (state) => ({
-  tasks : state.tasks.tasksById
+  tasks : state.projects.tasksById
 });
 const ProjectComponent = (props) => {
 
