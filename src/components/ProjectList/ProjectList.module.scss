@@ -4,7 +4,8 @@
     --colour: rgb(70, 247, 247);
     --colourDark: rgb(214, 58, 58);
     --insideColour: rgb(12, 12, 14);
-    --insideColourDark: white;
+    --insideColourDark: rgb(234, 245, 247);
+    --test: rgb(185, 25, 172);
 }
 .content {
     width:80%; 
@@ -41,17 +42,6 @@
     }
     &-theme-dark {
         background: var(--backgroundColourDark);
-    }
-}
-.link {
-    margin-left: 30%;
-    &-theme-light {
-        background: var(--backgroundColour);
-        color: var(--colour);
-    }
-    &-theme-dark {
-        background: var(--backgroundColourDark);
-        color: var(--colourDark);
     }
 }
 .header {

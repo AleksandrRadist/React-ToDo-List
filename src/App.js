@@ -1,11 +1,10 @@
-import './App.css';
-import MyTodoList from './components/TaskList/TaskList'
+import React from "react"
+import ToDoList from './components/ToDoList/ToDoList'
 
-const App = () => {
-  return (
-    <div>
-      <MyTodoList />
-    </div>
-  )
+export default function App() {
+  return(
+        <div>
+          <ToDoList/>
+        </div>
+      )
 }
-export default App;

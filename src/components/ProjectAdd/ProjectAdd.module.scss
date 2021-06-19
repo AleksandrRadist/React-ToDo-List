@@ -1,20 +1,16 @@
-.task {
-    margin: 10px;
-    width: 90%;
+.form {
+    width: 100%;
+    margin-top: 40%;
     &-theme-light {
         background: var(--backgroundColour);
-        border: 5px solid var(--colour);
     }
     &-theme-dark {
         background: var(--backgroundColourDark);
-        border: 5px solid var(--colourDark);
     }
-  }
-  
+}
 .line {
-    padding-top: 10px;
-    padding-left: 5%;
-    padding-right: 5%;
+    margin-left: 15%;
+    margin-top: 20px;
     &-theme-light {
         color: var(--colour);
     }
